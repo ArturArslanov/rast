@@ -45,13 +45,15 @@ def get_one_news(jobs_id):
 
 @blueprint.route('/api/jobs', methods=['POST'])
 def create_news():
+    session = db_session.create_session()
     if not request.json:
         return jsonify({'error': 'Empty request'})
     elif not all(key in request.json for key in ['job', 'work_size', 'collaborators',
                                                  'is_finished', 'user_id']):
         return jsonify({'error': 'Bad request'})
+    elif request.json['id'] and session.query(Jobs).filter(Jobs.id == request.json['id']).first():
+        return jsonify({'error': 'Id already exists'})
     res = request.json
-    session = db_session.create_session()
     user = session.query(User).filter(User.id == res['user_id']).first()
     job = Jobs()
     job.job = res['job']
@@ -63,6 +65,9 @@ def create_news():
             job.end_date = datetime.today()
         else:
             job.end_date = res['datetime']
+    if res['id']:
+        print(res['id'])
+        job.id = res['id']
     user.jobs.append(job)
     session.commit()
     return jsonify({'success': 'OK'})
