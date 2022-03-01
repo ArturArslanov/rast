@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, jsonify
 
 from add_team import add_team, add_work
 from data import db_session, api_jobs
@@ -8,6 +8,7 @@ from config import secret_key, bd_path, params
 from data.jobs import Jobs
 from data.users import User
 from form.register import RegisterForm
+from flask import make_response
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secret_key
@@ -47,6 +48,11 @@ def reqister():
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title1='Регистрация', form=form, **params)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 def main():
