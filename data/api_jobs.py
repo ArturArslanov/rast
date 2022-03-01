@@ -18,7 +18,7 @@ def get_news():
     return jsonify(
         {
             'jobs': [item.to_dict(only=(
-                'id', 'team_leader', 'job', 'work_size', 'start_date', 'end_date', 'collaborators', 'is_finished')) for
-                item in jobs]
+                'id', 'team_leader', 'job', 'work_size', 'start_date', 'end_date',
+                'collaborators', 'is_finished')) for item in jobs]
         }
     )
