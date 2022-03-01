@@ -20,5 +20,5 @@ print(req6.json())
 req7 = post('http://127.0.0.2:8081/api/jobs',
             json={'job': 'real_job2', 'work_size': 20, 'collaborators': '1, 2',
                   'is_finished': False,
-                  'user_id': 1, 'id': 96})  # пытается создать уже созданныйранее
+                  'user_id': 1, 'id': 96})  # пытается создать уже созданный ранее
 print(req7)
