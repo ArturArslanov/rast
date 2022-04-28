@@ -60,7 +60,7 @@ def main():
     session = db_session.create_session()
 
     app.register_blueprint(api_jobs.blueprint)
-    app.register_blueprint(api_user.blueprint)
+    # app.register_blueprint(api_user.blueprint)
     if not bool(session.query(User).all()):
         add_team(db_session)
     if not bool(session.query(Jobs).all()):

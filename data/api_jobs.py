@@ -3,6 +3,8 @@ from json import loads
 
 import flask
 from flask import jsonify, request
+from sqlalchemy import orm
+from werkzeug.exceptions import abort
 
 from . import db_session
 from .jobs import Jobs
@@ -71,3 +73,16 @@ def create_news():
     user.jobs.append(job)
     session.commit()
     return jsonify({'success': 'OK'})
+
+
+@blueprint.route('/api/jobs/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    print(id)
+    session = db_session.create_session()
+    job = session.query(Jobs).filter(Jobs.id == id).first()
+    if not job:
+        abort(404)
+    session.delete(job)
+
+    session.commit()
+    return jsonify(f'successfully deleted job with id {id}')
