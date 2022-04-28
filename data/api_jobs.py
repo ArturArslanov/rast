@@ -75,8 +75,7 @@ def create_news():
 
 
 @blueprint.route('/api/jobs/<int:id>', methods=['DELETE'])
-def delete_user(id):
-    print(id)
+def delete_job(id):
     session = db_session.create_session()
     job = session.query(Jobs).filter(Jobs.id == id).first()
     if not job:
@@ -88,6 +87,8 @@ def delete_user(id):
 
 @blueprint.route('/api/jobs/<int:id>', methods=['PUT'])
 def change_job(id):
+    if not request.json:
+        return jsonify({'error': 'Empty request'})
     res = request.json
     session = db_session.create_session()
     job = session.query(Jobs).filter(Jobs.id == id).first()
