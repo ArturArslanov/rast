@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Flask, render_template, redirect, jsonify
 
 from add_team import add_team, add_work
-from data import db_session, api_jobs
+from data import db_session, api_jobs, api_user
 from config import secret_key, bd_path, params
 from data.jobs import Jobs
 from data.users import User
@@ -58,7 +58,9 @@ def not_found(error):
 def main():
     db_session.global_init(bd_path)
     session = db_session.create_session()
+
     app.register_blueprint(api_jobs.blueprint)
+    app.register_blueprint(api_user.blueprint)
     if not bool(session.query(User).all()):
         add_team(db_session)
     if not bool(session.query(Jobs).all()):
