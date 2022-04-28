@@ -68,7 +68,6 @@ def create_news():
         else:
             job.end_date = res['datetime']
     if res['id']:
-        print(res['id'])
         job.id = res['id']
     user.jobs.append(job)
     session.commit()
@@ -83,6 +82,30 @@ def delete_user(id):
     if not job:
         abort(404)
     session.delete(job)
-
     session.commit()
     return jsonify(f'successfully deleted job with id {id}')
+
+
+@blueprint.route('/api/jobs/<int:id>', methods=['PUT'])
+def change_job(id):
+    res = request.json
+    session = db_session.create_session()
+    job = session.query(Jobs).filter(Jobs.id == id).first()
+    if not job:
+        abort(404)
+    if 'team_leader' in res.keys():
+        job.team_leader = res['team_leader']
+    if 'job' in res.keys():
+        job.job = res['job']
+    if 'work_size' in res.keys():
+        job.work_size = res['work_size']
+    if 'start_date' in res.keys():
+        job.start_date = res['start_date']
+    if 'end_date' in res.keys():
+        job.end_date = res['end_date']
+    if 'collaborators' in res.keys():
+        job.collaborators = res['collaborators']
+    if 'is_finished' in res.keys():
+        job.is_finished = res['is_finished']
+    session.commit()
+    return jsonify('successfully changed job')
